@@ -9,6 +9,8 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Input, Select, Textarea } from '../../components/ui/Input';
 import { ImageUpload } from '../../components/ui/ImageUpload';
+import { syncCatalogDefaultImages } from '../../lib/catalog-image-sync';
+import { partImage } from '../../lib/site-images';
 import type { Part } from '../../types';
 import { Plus, Pencil, Trash2, Package, Search, AlertTriangle } from 'lucide-react';
 
@@ -34,6 +36,7 @@ export function AdminParts() {
   const [editing, setEditing] = useState<Part | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [syncingImages, setSyncingImages] = useState(false);
 
   const categories = useMemo(() => Array.from(new Set(parts.map(p => p.category))), [parts]);
 
@@ -92,6 +95,19 @@ export function AdminParts() {
     if (error) show('Failed to update stock', 'error'); else refetch();
   };
 
+  const handleSyncImages = async () => {
+    setSyncingImages(true);
+    try {
+      const { updated } = await syncCatalogDefaultImages([], parts);
+      show(updated ? `${updated} part image${updated === 1 ? '' : 's'} saved to the database` : 'All part images are already set', 'success');
+      refetch();
+    } catch {
+      show('Failed to upload the supplied part images', 'error');
+    } finally {
+      setSyncingImages(false);
+    }
+  };
+
   return (
     <AdminLayout title="Parts Inventory">
       <div className="flex flex-col md:flex-row gap-3 mb-6">
@@ -109,6 +125,7 @@ export function AdminParts() {
           <option value="all">All Categories</option>
           {categories.map(c => <option key={c} value={c}>{c}</option>)}
         </Select>
+        <Button variant="outline" onClick={handleSyncImages} loading={syncingImages}>Upload supplied images</Button>
         <Button onClick={openCreate}>
           <Plus className="h-4 w-4 mr-1" /> Add Part
         </Button>
@@ -140,13 +157,7 @@ export function AdminParts() {
                   <tr key={p.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        {p.image_url ? (
-                          <img src={p.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />
-                        ) : (
-                          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                            <Package className="h-5 w-5 text-gray-400" />
-                          </div>
-                        )}
+                        <img src={partImage(p.category, p.image_url)} alt="" className="w-10 h-10 rounded-lg object-cover" />
                         <div className="min-w-0">
                           <p className="font-semibold text-gray-900 line-clamp-1">{p.name}</p>
                           <p className="text-xs text-gray-400">{p.sku}</p>
@@ -188,13 +199,7 @@ export function AdminParts() {
             {filtered.map(p => (
               <div key={p.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3 mb-3">
-                  {p.image_url ? (
-                    <img src={p.image_url} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
-                  ) : (
-                    <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                      <Package className="h-6 w-6 text-gray-400" />
-                    </div>
-                  )}
+                  <img src={partImage(p.category, p.image_url)} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 line-clamp-1">{p.name}</p>
                     <p className="text-xs text-gray-400">{p.sku} · {p.category}</p>

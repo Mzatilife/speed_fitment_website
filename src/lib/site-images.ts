@@ -6,6 +6,19 @@ import tyreServiceImage from '../../images/SPEED (10).JPG';
 import tyreStockImage from '../../images/SPEED (1).JPG';
 import workshopImage from '../../images/SPEED (20).JPG';
 
+export const defaultServiceImages: Record<string, string> = {
+  Alignment: alignmentImage,
+  Diagnostics: diagnosticsImage,
+  Bodywork: bodyworkImage,
+  Electrical: workshopImage,
+  Security: workshopImage,
+};
+
+export const defaultPartImages: Record<string, string> = {
+  Wheels: tyreServiceImage,
+  default: tyreStockImage,
+};
+
 /** Photos supplied by Speed Fitment, bundled with the site rather than loaded from stock-photo services. */
 export const siteImages = {
   hero: heroImage,
@@ -20,20 +33,11 @@ export const siteImages = {
 const stockImage = (url?: string | null) => !url || url.includes('images.pexels.com');
 
 export function serviceImage(category: string, imageUrl?: string | null) {
-  if (!stockImage(imageUrl)) return imageUrl;
-
-  const images: Record<string, string> = {
-    Alignment: siteImages.alignment,
-    Diagnostics: siteImages.diagnostics,
-    Bodywork: siteImages.bodywork,
-    Electrical: siteImages.workshop,
-    Security: siteImages.workshop,
-  };
-
-  return images[category] || siteImages.workshop;
+  if (!stockImage(imageUrl)) return imageUrl ?? siteImages.workshop;
+  return defaultServiceImages[category] || siteImages.workshop;
 }
 
 export function partImage(category: string, imageUrl?: string | null) {
-  if (!stockImage(imageUrl)) return imageUrl;
-  return category === 'Wheels' ? siteImages.tyreService : siteImages.tyreStock;
+  if (!stockImage(imageUrl)) return imageUrl ?? defaultPartImages.default;
+  return defaultPartImages[category] || defaultPartImages.default;
 }

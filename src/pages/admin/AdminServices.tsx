@@ -9,6 +9,8 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Input, Select, Textarea } from '../../components/ui/Input';
 import { ImageUpload } from '../../components/ui/ImageUpload';
+import { syncCatalogDefaultImages } from '../../lib/catalog-image-sync';
+import { serviceImage } from '../../lib/site-images';
 import type { Service } from '../../types';
 import { Plus, Pencil, Trash2, Wrench, Eye, EyeOff } from 'lucide-react';
 
@@ -28,6 +30,7 @@ export function AdminServices() {
   const [editing, setEditing] = useState<Service | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [syncingImages, setSyncingImages] = useState(false);
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setShowForm(true); };
   const openEdit = (s: Service) => {
@@ -67,14 +70,30 @@ export function AdminServices() {
     if (error) show('Failed to delete', 'error'); else { show('Service deleted', 'success'); refetch(); }
   };
 
+  const handleSyncImages = async () => {
+    setSyncingImages(true);
+    try {
+      const { updated } = await syncCatalogDefaultImages(services, []);
+      show(updated ? `${updated} service image${updated === 1 ? '' : 's'} saved to the database` : 'All service images are already set', 'success');
+      refetch();
+    } catch {
+      show('Failed to upload the supplied service images', 'error');
+    } finally {
+      setSyncingImages(false);
+    }
+  };
+
   return (
     <AdminLayout title="Services">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <p className="text-sm text-gray-500">{services.length} service(s) total</p>
-        <Button onClick={openCreate}>
-          <Plus className="h-4 w-4 mr-1" />
-          Add Service
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handleSyncImages} loading={syncingImages}>Upload supplied images</Button>
+          <Button onClick={openCreate}>
+            <Plus className="h-4 w-4 mr-1" />
+            Add Service
+          </Button>
+        </div>
       </div>
 
       {loading ? (
@@ -84,7 +103,7 @@ export function AdminServices() {
           {services.map(s => (
             <Card key={s.id} className="overflow-hidden">
               <div className="relative h-32 bg-gray-100">
-                {s.image_url && <img src={s.image_url} alt="" className="w-full h-full object-cover" />}
+                <img src={serviceImage(s.category, s.image_url)} alt="" className="w-full h-full object-cover" />
                 <div className="absolute top-2 right-2">
                   <Badge color={s.is_active ? 'green' : 'gray'}>{s.is_active ? 'Active' : 'Hidden'}</Badge>
                 </div>

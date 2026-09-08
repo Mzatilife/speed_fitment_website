@@ -92,6 +92,9 @@ export function AdminLayout({ children, title }: { children: ReactNode; title: s
               <LogOut className="h-4 w-4" /> Sign Out
             </button>
           </div>
+          <a href="https://mahala.graduatemw.com" target="_blank" rel="noreferrer" className="mt-4 block text-center text-[10px] text-gray-600 hover:text-brand-400 transition-colors">
+            Developed by Mahala Mkwepu
+          </a>
         </div>
       </aside>
 

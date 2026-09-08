@@ -111,7 +111,10 @@ export function Footer() {
 
         <div className="py-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500">© {new Date().getFullYear()} SpeedFitment. All rights reserved.</p>
-          <p className="text-xs text-gray-500">Premium Auto Services &amp; Logistics</p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+            <p className="text-xs text-gray-500">Premium Auto Services &amp; Logistics</p>
+            <a href="https://mahala.graduatemw.com" target="_blank" rel="noreferrer" className="text-xs text-gray-500 hover:text-brand-400 transition-colors">Developed by Mahala Mkwepu</a>
+          </div>
         </div>
       </div>
     </footer>
