@@ -9,6 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   loading?: boolean;
   fullWidth?: boolean;
+  iconOnly?: boolean;
 }
 
 const variants: Record<Variant, string> = {
@@ -26,10 +27,10 @@ const sizes: Record<Size, string> = {
   lg: 'px-7 py-3.5 text-[15px] rounded-xl gap-2',
 };
 
-export function Button({ variant = 'primary', size = 'md', children, loading, fullWidth, className = '', disabled, ...props }: ButtonProps) {
+export function Button({ variant = 'primary', size = 'md', children, loading, fullWidth, iconOnly, className = '', disabled, ...props }: ButtonProps) {
   return (
     <button
-      className={`inline-flex items-center justify-center font-semibold transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none ${variants[variant]} ${sizes[size]} ${fullWidth ? 'w-full' : ''} ${className}`}
+      className={`inline-flex items-center justify-center font-semibold transition-all duration-300 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none ${variants[variant]} ${sizes[size]} ${iconOnly ? (size === 'sm' ? 'h-8 w-8 !p-0' : size === 'lg' ? 'h-12 w-12 !p-0' : 'h-10 w-10 !p-0') : ''} ${fullWidth ? 'w-full' : ''} ${className}`}
       disabled={disabled || loading}
       {...props}
     >

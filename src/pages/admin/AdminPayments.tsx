@@ -9,8 +9,9 @@ import { StatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Input, Select } from '../../components/ui/Input';
+import { DataTableToolbar, SortableHeader, useTableSort } from '../../components/ui/DataTable';
 import type { PaymentMethod } from '../../types';
-import { Search, DollarSign, Plus, TrendingUp, Trash2 } from 'lucide-react';
+import { DollarSign, Plus, TrendingUp, Trash2 } from 'lucide-react';
 
 export function AdminPayments() {
   const { payments, loading, refetch } = usePayments();
@@ -34,6 +35,14 @@ export function AdminPayments() {
     }
     return result;
   }, [payments, methodFilter, search]);
+  const { sortedRows, sort, toggleSort } = useTableSort(filtered, (payment, key) => {
+    if (key === 'customer') return payment.customer_name;
+    if (key === 'amount') return Number(payment.amount);
+    if (key === 'method') return payment.method;
+    if (key === 'reference') return payment.reference ?? '';
+    if (key === 'date') return payment.created_at;
+    return payment.status;
+  }, 'date');
 
   const totalPaid = payments.filter(p => p.status === 'paid').reduce((s, p) => s + Number(p.amount), 0);
   const todayPaid = payments
@@ -127,24 +136,14 @@ export function AdminPayments() {
         </Card>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by customer or reference..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
-          />
-        </div>
-        <Select value={methodFilter} onChange={e => setMethodFilter(e.target.value)} className="md:w-48">
+      <div className="flex flex-col gap-3 md:flex-row md:items-start">
+        <div className="flex-1"><DataTableToolbar search={search} onSearchChange={setSearch} searchPlaceholder="Search by customer or reference..." resultCount={sortedRows.length} onClear={() => { setSearch(''); setMethodFilter('all'); }} filter={<Select aria-label="Filter payments by method" value={methodFilter} onChange={e => setMethodFilter(e.target.value)} className="w-full md:w-48">
           <option value="all">All Methods</option>
           <option value="cash">Cash</option>
           <option value="mobile_money">Mobile Money</option>
           <option value="card">Card</option>
           <option value="bank_transfer">Bank Transfer</option>
-        </Select>
+        </Select>} /></div>
         <Button onClick={() => setShowAdd(true)}>
           <Plus className="h-4 w-4 mr-1" />
           Record Payment
@@ -165,17 +164,17 @@ export function AdminPayments() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr className="text-left text-xs text-gray-500 uppercase tracking-wider">
-                  <th className="px-4 py-3 font-semibold">Customer</th>
-                  <th className="px-4 py-3 font-semibold">Amount</th>
-                  <th className="px-4 py-3 font-semibold">Method</th>
-                  <th className="px-4 py-3 font-semibold hidden md:table-cell">Reference</th>
-                  <th className="px-4 py-3 font-semibold hidden lg:table-cell">Date</th>
-                  <th className="px-4 py-3 font-semibold">Status</th>
+                  <SortableHeader label="Customer" column="customer" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Amount" column="amount" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Method" column="method" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Reference" column="reference" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden md:table-cell" />
+                  <SortableHeader label="Date" column="date" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden lg:table-cell" />
+                  <SortableHeader label="Status" column="status" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
                   <th className="px-4 py-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filtered.map(payment => (
+                {sortedRows.map(payment => (
                   <tr key={payment.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3 font-semibold text-gray-900">{payment.customer_name}</td>
                     <td className="px-4 py-3 font-bold text-gray-900">{formatMWK(Number(payment.amount))}</td>
@@ -190,7 +189,7 @@ export function AdminPayments() {
                             Refund
                           </Button>
                         )}
-                        <Button size="sm" variant="ghost" onClick={() => handleDelete(payment.id)} className="text-red-500">
+                          <Button size="sm" variant="ghost" iconOnly aria-label={`Delete payment from ${payment.customer_name}`} title="Delete payment" onClick={() => handleDelete(payment.id)} className="text-red-500">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -201,7 +200,7 @@ export function AdminPayments() {
             </table>
           </div>
           <div className="md:hidden divide-y divide-gray-100">
-            {filtered.map(payment => (
+            {sortedRows.map(payment => (
               <div key={payment.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start justify-between mb-2">
                   <div>
@@ -219,7 +218,7 @@ export function AdminPayments() {
                       Refund
                     </Button>
                   )}
-                  <Button size="sm" variant="ghost" onClick={() => handleDelete(payment.id)} className="text-red-500">
+                  <Button size="sm" variant="ghost" iconOnly aria-label={`Delete payment from ${payment.customer_name}`} title="Delete payment" onClick={() => handleDelete(payment.id)} className="text-red-500">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>

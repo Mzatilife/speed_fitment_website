@@ -9,8 +9,9 @@ import { StatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Select, Input, Textarea } from '../../components/ui/Input';
+import { DataTableToolbar, SortableHeader, useTableSort } from '../../components/ui/DataTable';
 import type { Order, OrderStatus, PaymentMethod } from '../../types';
-import { Search, Eye, ShoppingCart, Package, DollarSign, Trash2 } from 'lucide-react';
+import { Eye, ShoppingCart, Package, DollarSign, Trash2 } from 'lucide-react';
 
 const orderStatuses: OrderStatus[] = ['pending', 'paid', 'fulfilled', 'cancelled'];
 
@@ -45,6 +46,13 @@ export function AdminOrders() {
     }
     return result;
   }, [orders, statusFilter, search]);
+  const { sortedRows, sort, toggleSort } = useTableSort(filtered, (order, key) => {
+    if (key === 'customer') return order.customer_name;
+    if (key === 'items') return order.items.length;
+    if (key === 'total') return Number(order.total);
+    if (key === 'date') return order.created_at;
+    return order.status;
+  }, 'date');
 
   const orderPayments = (orderId: string) => payments.filter(p => p.order_id === orderId);
 
@@ -113,22 +121,10 @@ export function AdminOrders() {
 
   return (
     <AdminLayout title="Orders">
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by customer name or phone..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
-          />
-        </div>
-        <Select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="md:w-48">
+      <DataTableToolbar search={search} onSearchChange={setSearch} searchPlaceholder="Search by customer, phone, or email..." resultCount={sortedRows.length} onClear={() => { setSearch(''); setStatusFilter('all'); }} filter={<Select aria-label="Filter orders by status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="w-full md:w-48">
           <option value="all">All Statuses</option>
           {orderStatuses.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
-        </Select>
-      </div>
+        </Select>} />
 
       <Card className="overflow-hidden">
         {loading ? (
@@ -144,16 +140,16 @@ export function AdminOrders() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr className="text-left text-xs text-gray-500 uppercase tracking-wider">
-                  <th className="px-4 py-3 font-semibold">Customer</th>
-                  <th className="px-4 py-3 font-semibold hidden md:table-cell">Items</th>
-                  <th className="px-4 py-3 font-semibold">Total</th>
-                  <th className="px-4 py-3 font-semibold hidden lg:table-cell">Date</th>
-                  <th className="px-4 py-3 font-semibold">Status</th>
+                  <SortableHeader label="Customer" column="customer" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Items" column="items" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden md:table-cell" />
+                  <SortableHeader label="Total" column="total" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Date" column="date" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden lg:table-cell" />
+                  <SortableHeader label="Status" column="status" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
                   <th className="px-4 py-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filtered.map(order => {
+                {sortedRows.map(order => {
                   const pays = orderPayments(order.id);
                   const paid = pays.reduce((s, p) => s + Number(p.amount), 0);
                   return (
@@ -170,7 +166,7 @@ export function AdminOrders() {
                       <td className="px-4 py-3 text-gray-500 hidden lg:table-cell">{formatDateTime(order.created_at)}</td>
                       <td className="px-4 py-3"><StatusBadge status={order.status} /></td>
                       <td className="px-4 py-3 text-right">
-                        <Button size="sm" variant="ghost" onClick={() => openDetail(order)}>
+                        <Button size="sm" variant="ghost" iconOnly aria-label={`View order for ${order.customer_name}`} title="View order" onClick={() => openDetail(order)}>
                           <Eye className="h-4 w-4" />
                         </Button>
                       </td>
@@ -181,7 +177,7 @@ export function AdminOrders() {
             </table>
           </div>
           <div className="md:hidden divide-y divide-gray-100">
-            {filtered.map(order => {
+            {sortedRows.map(order => {
               const pays = orderPayments(order.id);
               const paid = pays.reduce((s, p) => s + Number(p.amount), 0);
               return (

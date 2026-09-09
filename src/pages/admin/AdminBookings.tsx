@@ -8,8 +8,9 @@ import { StatusBadge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Select, Input, Textarea } from '../../components/ui/Input';
+import { DataTableToolbar, SortableHeader, useTableSort } from '../../components/ui/DataTable';
 import type { Booking, BookingStatus } from '../../types';
-import { Search, Eye, Calendar, Phone, Mail, Car, Clock, Trash2 } from 'lucide-react';
+import { Eye, Calendar, Phone, Mail, Car, Clock, Trash2 } from 'lucide-react';
 
 const statusOptions: BookingStatus[] = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'];
 
@@ -38,6 +39,13 @@ export function AdminBookings() {
     }
     return result;
   }, [bookings, statusFilter, search]);
+  const { sortedRows, sort, toggleSort } = useTableSort(filtered, (booking, key) => {
+    if (key === 'customer') return booking.customer_name;
+    if (key === 'service') return booking.service_name;
+    if (key === 'vehicle') return `${booking.vehicle_make ?? ''} ${booking.vehicle_model ?? ''}`;
+    if (key === 'date') return booking.preferred_date ?? booking.created_at;
+    return booking.status;
+  }, 'date');
 
   const openDetail = (booking: Booking) => {
     setSelected(booking);
@@ -76,22 +84,10 @@ export function AdminBookings() {
 
   return (
     <AdminLayout title="Bookings">
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by name, phone, service, vehicle..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
-          />
-        </div>
-        <Select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="md:w-48">
+      <DataTableToolbar search={search} onSearchChange={setSearch} searchPlaceholder="Search by name, phone, service, or vehicle..." resultCount={sortedRows.length} onClear={() => { setSearch(''); setStatusFilter('all'); }} filter={<Select aria-label="Filter bookings by status" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="w-full md:w-48">
           <option value="all">All Statuses</option>
           {statusOptions.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')}</option>)}
-        </Select>
-      </div>
+        </Select>} />
 
       <Card className="overflow-hidden">
         {loading ? (
@@ -107,16 +103,16 @@ export function AdminBookings() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr className="text-left text-xs text-gray-500 uppercase tracking-wider">
-                  <th className="px-4 py-3 font-semibold">Customer</th>
-                  <th className="px-4 py-3 font-semibold">Service</th>
-                  <th className="px-4 py-3 font-semibold hidden lg:table-cell">Vehicle</th>
-                  <th className="px-4 py-3 font-semibold hidden lg:table-cell">Date</th>
-                  <th className="px-4 py-3 font-semibold">Status</th>
+                  <SortableHeader label="Customer" column="customer" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Service" column="service" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Vehicle" column="vehicle" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden lg:table-cell" />
+                  <SortableHeader label="Date" column="date" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden lg:table-cell" />
+                  <SortableHeader label="Status" column="status" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
                   <th className="px-4 py-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filtered.map(booking => (
+                {sortedRows.map(booking => (
                   <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3">
                       <p className="font-semibold text-gray-900">{booking.customer_name}</p>
@@ -132,7 +128,7 @@ export function AdminBookings() {
                     </td>
                     <td className="px-4 py-3"><StatusBadge status={booking.status} /></td>
                     <td className="px-4 py-3 text-right">
-                      <Button size="sm" variant="ghost" onClick={() => openDetail(booking)}>
+                      <Button size="sm" variant="ghost" iconOnly aria-label={`View booking for ${booking.customer_name}`} title="View booking" onClick={() => openDetail(booking)}>
                         <Eye className="h-4 w-4" />
                       </Button>
                     </td>
@@ -142,7 +138,7 @@ export function AdminBookings() {
             </table>
           </div>
           <div className="md:hidden divide-y divide-gray-100">
-            {filtered.map(booking => (
+            {sortedRows.map(booking => (
               <div key={booking.id} className="p-4 hover:bg-gray-50 transition-colors" onClick={() => openDetail(booking)}>
                 <div className="flex items-start justify-between mb-2">
                   <div>

@@ -9,8 +9,9 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Select, Input } from '../../components/ui/Input';
+import { DataTableToolbar, SortableHeader, useTableSort } from '../../components/ui/DataTable';
 import type { Profile, UserRole } from '../../types';
-import { Search, User, Pencil, Trash2, ShieldCheck, UserPlus } from 'lucide-react';
+import { User, Pencil, Trash2, ShieldCheck, UserPlus } from 'lucide-react';
 
 export function AdminUsers() {
   const { profiles, loading, refetch } = useProfiles();
@@ -38,6 +39,12 @@ export function AdminUsers() {
     }
     return result;
   }, [profiles, search, roleFilter]);
+  const { sortedRows, sort, toggleSort } = useTableSort(filtered, (profile, key) => {
+    if (key === 'user') return profile.full_name ?? '';
+    if (key === 'phone') return profile.phone ?? '';
+    if (key === 'joined') return profile.created_at;
+    return profile.role;
+  }, 'joined');
 
   const openEdit = (p: Profile) => {
     setEditing(p);
@@ -132,23 +139,13 @@ export function AdminUsers() {
         </Card>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
-          />
-        </div>
-        <Select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="md:w-44">
+      <div className="flex flex-col gap-3 md:flex-row md:items-start">
+        <div className="flex-1"><DataTableToolbar search={search} onSearchChange={setSearch} searchPlaceholder="Search users by name or phone..." resultCount={sortedRows.length} onClear={() => { setSearch(''); setRoleFilter('all'); }} filter={<Select aria-label="Filter users by role" value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="w-full md:w-44">
           <option value="all">All Roles</option>
           <option value="admin">Administrators</option>
           <option value="cashier">Cashiers</option>
           <option value="customer">Customers</option>
-        </Select>
+        </Select>} /></div>
         <Button onClick={() => setShowCreate(true)}>
           <UserPlus className="h-4 w-4 mr-1" />
           Add User
@@ -169,15 +166,15 @@ export function AdminUsers() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr className="text-left text-xs text-gray-500 uppercase tracking-wider">
-                  <th className="px-4 py-3 font-semibold">User</th>
-                  <th className="px-4 py-3 font-semibold hidden md:table-cell">Phone</th>
-                  <th className="px-4 py-3 font-semibold">Role</th>
-                  <th className="px-4 py-3 font-semibold hidden lg:table-cell">Joined</th>
+                  <SortableHeader label="User" column="user" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Phone" column="phone" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden md:table-cell" />
+                  <SortableHeader label="Role" column="role" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Joined" column="joined" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden lg:table-cell" />
                   <th className="px-4 py-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filtered.map(p => (
+                {sortedRows.map(p => (
                   <tr key={p.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
@@ -200,11 +197,11 @@ export function AdminUsers() {
                     <td className="px-4 py-3 text-gray-500 hidden lg:table-cell">{formatDate(p.created_at)}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-1">
-                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)}>
+                        <Button size="sm" variant="ghost" iconOnly aria-label={`Edit ${p.full_name || 'user'}`} title="Edit user" onClick={() => openEdit(p)}>
                           <Pencil className="h-4 w-4" />
                         </Button>
                         {p.id !== currentUser?.id && (
-                          <Button size="sm" variant="ghost" onClick={() => handleDelete(p.id)} className="text-red-500">
+                          <Button size="sm" variant="ghost" iconOnly aria-label={`Delete ${p.full_name || 'user'}`} title="Delete user" onClick={() => handleDelete(p.id)} className="text-red-500">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         )}
@@ -216,7 +213,7 @@ export function AdminUsers() {
             </table>
           </div>
           <div className="md:hidden divide-y divide-gray-100">
-            {filtered.map(p => (
+            {sortedRows.map(p => (
               <div key={p.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center font-bold text-gray-600">
@@ -237,11 +234,11 @@ export function AdminUsers() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-400">Joined {formatDate(p.created_at)}</span>
                   <div className="flex gap-1">
-                    <Button size="sm" variant="ghost" onClick={() => openEdit(p)}>
+                    <Button size="sm" variant="ghost" iconOnly aria-label={`Edit ${p.full_name || 'user'}`} title="Edit user" onClick={() => openEdit(p)}>
                       <Pencil className="h-4 w-4" />
                     </Button>
                     {p.id !== currentUser?.id && (
-                      <Button size="sm" variant="ghost" onClick={() => handleDelete(p.id)} className="text-red-500">
+                      <Button size="sm" variant="ghost" iconOnly aria-label={`Delete ${p.full_name || 'user'}`} title="Delete user" onClick={() => handleDelete(p.id)} className="text-red-500">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     )}

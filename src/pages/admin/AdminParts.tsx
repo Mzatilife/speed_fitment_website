@@ -8,11 +8,12 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { Input, Select, Textarea } from '../../components/ui/Input';
+import { DataTableToolbar, SortableHeader, useTableSort } from '../../components/ui/DataTable';
 import { ImageUpload } from '../../components/ui/ImageUpload';
 import { syncCatalogDefaultImages } from '../../lib/catalog-image-sync';
 import { partImage } from '../../lib/site-images';
 import type { Part } from '../../types';
-import { Plus, Pencil, Trash2, Package, Search, AlertTriangle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Package, AlertTriangle } from 'lucide-react';
 
 interface FormState {
   name: string; description: string; category: string; price: number;
@@ -49,6 +50,12 @@ export function AdminParts() {
     }
     return result;
   }, [parts, search, categoryFilter]);
+  const { sortedRows, sort, toggleSort } = useTableSort(filtered, (part, key) => {
+    if (key === 'part') return part.name;
+    if (key === 'category') return part.category;
+    if (key === 'price') return Number(part.price);
+    return part.stock_quantity;
+  }, 'part', 'asc');
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setShowForm(true); };
   const openEdit = (p: Part) => {
@@ -110,21 +117,11 @@ export function AdminParts() {
 
   return (
     <AdminLayout title="Parts Inventory">
-      <div className="flex flex-col md:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search parts..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
-          />
-        </div>
-        <Select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="md:w-48">
+      <div className="flex flex-col gap-3 md:flex-row md:items-start">
+        <div className="flex-1"><DataTableToolbar search={search} onSearchChange={setSearch} searchPlaceholder="Search by part name or SKU..." resultCount={sortedRows.length} onClear={() => { setSearch(''); setCategoryFilter('all'); }} filter={<Select aria-label="Filter parts by category" value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="w-full md:w-48">
           <option value="all">All Categories</option>
           {categories.map(c => <option key={c} value={c}>{c}</option>)}
-        </Select>
+        </Select>} /></div>
         <Button variant="outline" onClick={handleSyncImages} loading={syncingImages}>Upload supplied images</Button>
         <Button onClick={openCreate}>
           <Plus className="h-4 w-4 mr-1" /> Add Part
@@ -145,15 +142,15 @@ export function AdminParts() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr className="text-left text-xs text-gray-500 uppercase tracking-wider">
-                  <th className="px-4 py-3 font-semibold">Part</th>
-                  <th className="px-4 py-3 font-semibold hidden md:table-cell">Category</th>
-                  <th className="px-4 py-3 font-semibold">Price</th>
-                  <th className="px-4 py-3 font-semibold">Stock</th>
+                  <SortableHeader label="Part" column="part" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Category" column="category" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} className="hidden md:table-cell" />
+                  <SortableHeader label="Price" column="price" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
+                  <SortableHeader label="Stock" column="stock" sortKey={String(sort.key)} direction={sort.direction} onSort={toggleSort} />
                   <th className="px-4 py-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filtered.map(p => (
+                {sortedRows.map(p => (
                   <tr key={p.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
@@ -182,10 +179,10 @@ export function AdminParts() {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-1">
-                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)}>
+                        <Button size="sm" variant="ghost" iconOnly aria-label={`Edit ${p.name}`} title="Edit part" onClick={() => openEdit(p)}>
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="ghost" onClick={() => handleDelete(p.id)} className="text-red-500">
+                        <Button size="sm" variant="ghost" iconOnly aria-label={`Delete ${p.name}`} title="Delete part" onClick={() => handleDelete(p.id)} className="text-red-500">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -196,7 +193,7 @@ export function AdminParts() {
             </table>
           </div>
           <div className="md:hidden divide-y divide-gray-100">
-            {filtered.map(p => (
+            {sortedRows.map(p => (
               <div key={p.id} className="p-4 hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3 mb-3">
                   <img src={partImage(p.category, p.image_url)} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
@@ -222,7 +219,7 @@ export function AdminParts() {
                   <Button size="sm" variant="outline" onClick={() => openEdit(p)}>
                     <Pencil className="h-3.5 w-3.5" /> Edit
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={() => handleDelete(p.id)} className="text-red-500">
+                  <Button size="sm" variant="ghost" iconOnly aria-label={`Delete ${p.name}`} title="Delete part" onClick={() => handleDelete(p.id)} className="text-red-500">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
