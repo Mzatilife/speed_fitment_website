@@ -5,6 +5,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Decorative, off-canvas shapes must not widen the mobile page. */
+    overflow-x: clip;
   }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -12,7 +14,11 @@
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: -0.011em;
     background: #fff;
-    overflow-x: hidden;
+    overflow-x: clip;
+  }
+  #root {
+    max-width: 100%;
+    overflow-x: clip;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Sora', 'Inter', system-ui, sans-serif;
@@ -542,6 +548,16 @@
 .speed-service-card:hover, .speed-workflow-card:hover, .speed-benefit-card:hover, .speed-testimonial-card:hover { border-color: rgba(224,39,32,.48) !important; box-shadow: 0 20px 48px rgba(180,44,24,.16) !important; }
 .speed-service-card .text-brand-600 { color: #c91f25 !important; }
 .speed-workflow .bg-gradient-to-br.from-brand-400 { background-image: linear-gradient(135deg,#f6a813,#d52122) !important; box-shadow: 0 10px 22px rgba(213,33,34,.25); }
+
+.speed-logistics {
+  background:
+    radial-gradient(circle at 88% 20%, rgba(255, 185, 24, .19), transparent 28rem),
+    radial-gradient(circle at 6% 90%, rgba(225, 58, 44, .22), transparent 28rem),
+    #3f0d0d !important;
+}
+.speed-logistics .speed-section-intro h2 { color: #fffaf5 !important; }
+.speed-logistics .speed-section-intro p { color: #efd8cf !important; }
+.speed-logistics .speed-section-intro .eyebrow { color: #ffd35a !important; background: rgba(255,185,24,.10) !important; border-color: rgba(255,185,24,.28) !important; }
 
 @media (max-width: 1023px) {
   .speed-hero > .absolute.inset-0:first-child { opacity: 1; }

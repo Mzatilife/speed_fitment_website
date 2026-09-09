@@ -248,8 +248,7 @@ export function HomePage() {
       </section>
 
       {/* Logistics Section */}
-      {logistics.length > 0 && (
-        <section className="speed-section speed-logistics py-16 md:py-20 bg-gray-900 relative overflow-hidden">
+      <section className="speed-section speed-logistics py-16 md:py-20 bg-gray-900 relative overflow-hidden">
           <div className="absolute inset-0 bg-grid-pattern opacity-20" />
           <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-accent-500/5 rounded-full blur-[100px]" />
@@ -277,10 +276,14 @@ export function HomePage() {
                   <p className="text-sm font-bold text-brand-400">{item.price > 0 ? formatMWK(Number(item.price)) : 'Custom Quote'}</p>
                 </div>
               ))}
+              {logistics.length === 0 && (
+                <div className="col-span-full rounded-2xl border border-white/15 bg-white/5 px-6 py-8 text-center text-sm text-white/75">
+                  Material sourcing and delivery options are available on request. Contact our team for a custom quote.
+                </div>
+              )}
             </div>
           </div>
-        </section>
-      )}
+      </section>
 
       {/* Why Choose Us */}
       <section className="speed-section speed-surface py-16 md:py-20 bg-gray-50 relative">

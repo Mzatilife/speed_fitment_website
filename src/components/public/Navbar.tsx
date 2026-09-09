@@ -59,17 +59,17 @@ export function Navbar() {
   const useSurface = scrolled || mobileOpen || !isHome;
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-[70] transition-all duration-500 ${useSurface ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.06),0_12px_36px_rgba(15,23,42,0.06)] border-b border-slate-200/70' : 'bg-transparent'}`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className={`fixed inset-x-0 top-0 z-[70] w-full max-w-full overflow-x-clip transition-all duration-500 ${useSurface ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.06),0_12px_36px_rgba(15,23,42,0.06)] border-b border-slate-200/70' : 'bg-transparent'}`}>
+      <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 group">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5 group">
             <div className="relative">
               <img src="/logo.png" alt="SpeedFitment" className="w-11 h-11 rounded-xl object-contain group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 ease-out" />
               <div className="absolute inset-0 bg-brand-500/30 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
             </div>
-            <div className="flex flex-col leading-none">
-              <span className={`text-lg font-extrabold tracking-tight font-display transition-colors duration-500 ${isHome && !useSurface ? 'text-white' : 'text-slate-950'}`}>SpeedFitment</span>
+            <div className="min-w-0 flex flex-col leading-none">
+              <span className={`truncate text-lg font-extrabold tracking-tight font-display transition-colors duration-500 ${isHome && !useSurface ? 'text-white' : 'text-slate-950'}`}>SpeedFitment</span>
             </div>
           </Link>
 
@@ -121,7 +121,7 @@ export function Navbar() {
           {/* Mobile Toggle */}
           <button
             type="button"
-            className="lg:hidden relative z-10 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/85 text-slate-900 shadow-sm backdrop-blur-md transition-all hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-95"
+            className="lg:hidden relative z-10 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white/85 text-slate-900 shadow-sm backdrop-blur-md transition-all hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-95"
             onClick={() => setMobileOpen(open => !open)}
             aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileOpen}
