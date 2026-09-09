@@ -62,8 +62,8 @@ export function CustomerDashboard() {
   if (!profile) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-gray-900 sticky top-0 z-20">
+    <div className="min-h-screen bg-[#fff7ed]">
+      <header className="bg-gradient-to-r from-brand-950 via-brand-900 to-brand-800 sticky top-0 z-20 shadow-lg shadow-brand-950/15">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img src="/logo.png" alt="SpeedFitment" className="w-9 h-9 rounded-lg object-contain" />
@@ -78,7 +78,7 @@ export function CustomerDashboard() {
       <main className="max-w-5xl mx-auto px-4 py-8">
         <Card className="p-6 mb-6">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold text-xl">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-400 to-brand-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-brand-500/20">
               {profile.full_name?.charAt(0).toUpperCase() || 'U'}
             </div>
             <div className="flex-1">
@@ -94,32 +94,32 @@ export function CustomerDashboard() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <Card className="p-4 text-center">
-            <Calendar className="h-6 w-6 text-amber-600 mx-auto mb-2" />
+            <Calendar className="h-6 w-6 text-brand-600 mx-auto mb-2" />
             <p className="text-xl font-extrabold text-gray-900">{stats.totalBookings}</p>
             <p className="text-xs text-gray-500">Total Bookings</p>
           </Card>
           <Card className="p-4 text-center">
-            <Wrench className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+            <Wrench className="h-6 w-6 text-accent-600 mx-auto mb-2" />
             <p className="text-xl font-extrabold text-gray-900">{stats.activeBookings}</p>
             <p className="text-xs text-gray-500">Active Bookings</p>
           </Card>
           <Card className="p-4 text-center">
-            <ShoppingCart className="h-6 w-6 text-purple-600 mx-auto mb-2" />
+            <ShoppingCart className="h-6 w-6 text-brand-500 mx-auto mb-2" />
             <p className="text-xl font-extrabold text-gray-900">{stats.totalOrders}</p>
             <p className="text-xs text-gray-500">Total Orders</p>
           </Card>
           <Card className="p-4 text-center">
-            <Package className="h-6 w-6 text-emerald-600 mx-auto mb-2" />
+            <Package className="h-6 w-6 text-brand-700 mx-auto mb-2" />
             <p className="text-xl font-extrabold text-gray-900">{stats.activeOrders}</p>
             <p className="text-xs text-gray-500">Active Orders</p>
           </Card>
         </div>
 
         <div className="flex gap-2 mb-4 p-1 bg-white rounded-xl border border-gray-200">
-          <button onClick={() => setTab('bookings')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${tab === 'bookings' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50'}`}>
+          <button onClick={() => setTab('bookings')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${tab === 'bookings' ? 'bg-brand-700 text-white shadow-sm' : 'text-gray-600 hover:bg-brand-50'}`}>
             <Calendar className="h-4 w-4" /> My Bookings
           </button>
-          <button onClick={() => setTab('orders')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${tab === 'orders' ? 'bg-gray-900 text-white' : 'text-gray-600 hover:bg-gray-50'}`}>
+          <button onClick={() => setTab('orders')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors ${tab === 'orders' ? 'bg-brand-700 text-white shadow-sm' : 'text-gray-600 hover:bg-brand-50'}`}>
             <ShoppingCart className="h-4 w-4" /> My Orders
           </button>
         </div>
@@ -178,7 +178,7 @@ export function CustomerDashboard() {
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                      <span className="font-extrabold text-amber-600">{formatMWK(Number(order.total))}</span>
+                      <span className="font-extrabold text-brand-600">{formatMWK(Number(order.total))}</span>
                       <StatusBadge status={order.status} />
                     </div>
                   </div>

@@ -83,14 +83,7 @@ export function HomePage() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-28 w-full">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand-400/30 bg-brand-400/10 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-brand-300 animate-fade-in-down">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-brand-300 opacity-75 animate-pulse-ring" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-300" />
-              </span>
-              Precision care, in motion
-            </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-[1.02] animate-fade-in-up font-display mt-2 text-shadow-glow">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-[1.02] animate-fade-in-up font-display text-shadow-glow">
               Expert Auto Care<br />
               <span className="animate-shimmer-text">Done Right</span>
             </h1>

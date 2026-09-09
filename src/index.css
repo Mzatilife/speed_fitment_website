@@ -350,3 +350,200 @@
   .speed-section-intro h2 { font-size: 2.25rem; }
   .speed-service-card, .speed-workflow-card, .speed-benefit-card, .speed-testimonial-card { border-radius: 1.25rem !important; }
 }
+
+/* 2026 public experience: bright, precise and deliberately quiet. */
+.speed-home {
+  --speed-ink: #101828;
+  --speed-muted: #667085;
+  --speed-blue: #2563eb;
+  --speed-surface: #f7f9fc;
+  background: #f7f9fc;
+}
+
+.speed-hero {
+  min-height: 44rem;
+  background: #f6f8fc !important;
+  isolation: isolate;
+}
+
+.speed-hero > .absolute.inset-0:first-child {
+  left: auto;
+  right: 0;
+  width: min(54%, 58rem);
+  border-radius: 0 0 0 4rem;
+  overflow: hidden;
+  opacity: 1;
+  box-shadow: -24px 28px 70px rgba(15, 23, 42, 0.12);
+}
+
+.speed-hero > .absolute.inset-0:first-child img {
+  opacity: 1 !important;
+  transform: scale(1.035);
+  filter: saturate(0.86) contrast(0.96) brightness(1.08);
+}
+
+.speed-hero > .absolute.inset-0:first-child > div:nth-child(2) {
+  background: linear-gradient(90deg, #f6f8fc 0%, rgba(246, 248, 252, 0.7) 22%, rgba(246, 248, 252, 0.05) 70%) !important;
+}
+
+.speed-hero > .absolute.inset-0:first-child > div:nth-child(3) {
+  background: linear-gradient(0deg, rgba(15, 23, 42, 0.22), transparent 48%) !important;
+}
+
+.speed-hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 38rem;
+  height: 38rem;
+  top: -18rem;
+  left: -15rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.19), rgba(191, 219, 254, 0.03) 61%, transparent 70%);
+}
+
+.speed-hero::after {
+  border-color: rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 1.8rem rgba(37, 99, 235, 0.035), 0 0 0 3.6rem rgba(37, 99, 235, 0.018);
+  opacity: 0.8;
+}
+
+.speed-hero .hero-orb { border-color: rgba(37, 99, 235, 0.13); }
+.speed-hero .speed-line { background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.35), transparent); }
+.speed-hero .bg-brand-500\/20 { background-color: rgba(37, 99, 235, 0.10) !important; }
+.speed-hero .bg-accent-500\/10, .speed-hero .bg-brand-600\/10 { background-color: rgba(125, 211, 252, 0.12) !important; }
+.speed-hero .bg-grid-pattern { opacity: 0.35 !important; }
+
+.speed-hero .border-brand-400\/30 { border-color: rgb(191 219 254) !important; }
+.speed-hero .bg-brand-400\/10 { background-color: rgba(255,255,255,0.78) !important; }
+.speed-hero .text-brand-300 { color: #2563eb !important; }
+.speed-hero .bg-brand-300 { background-color: #3b82f6 !important; }
+.speed-hero h1, .speed-hero h1.text-white { color: #101828 !important; text-shadow: none !important; }
+.speed-hero .animate-shimmer-text { background: linear-gradient(100deg, #1d4ed8, #2563eb 50%, #0f172a) !important; background-size: 180% auto !important; -webkit-background-clip: text !important; background-clip: text !important; }
+.speed-hero .text-gray-300 { color: #64748b !important; }
+.speed-hero .bg-white\/5 { background-color: rgba(255,255,255,0.72) !important; }
+.speed-hero .border-white\/10 { border-color: rgba(203, 213, 225, 0.85) !important; }
+.speed-hero .text-white { color: #101828 !important; }
+.speed-hero .text-gray-400 { color: #64748b !important; }
+.speed-hero .text-brand-400 { color: #2563eb !important; }
+.speed-hero .border-gray-950 { border-color: white !important; }
+.speed-hero .bg-black\/20 { background-color: rgba(255,255,255,0.72) !important; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); }
+.speed-hero .from-brand-300 { --tw-gradient-from: #93c5fd var(--tw-gradient-from-position) !important; }
+.speed-hero .to-brand-600 { --tw-gradient-to: #2563eb var(--tw-gradient-to-position) !important; }
+.speed-hero .bg-white\/15 { background-color: rgba(255,255,255,0.82) !important; }
+.speed-hero .border-white\/20 { border-color: rgba(203,213,225,0.85) !important; }
+.speed-hero .text-shadow-glow { text-shadow: none !important; }
+.speed-hero .shadow-glow-brand { box-shadow: 0 14px 30px rgba(37,99,235,0.20) !important; }
+.speed-hero button.bg-brand-500 { background: #101828 !important; color: white !important; }
+.speed-hero button.bg-brand-500:hover { background: #1e293b !important; }
+.speed-hero button.bg-white\/5 { color: #1e293b !important; border-color: #dbe3ef !important; background: rgba(255,255,255,0.86) !important; }
+
+.speed-trust-bar { background: rgba(255,255,255,0.86) !important; backdrop-filter: blur(16px); }
+.speed-trust-bar .text-gray-300 { color: #475467 !important; }
+.speed-trust-bar .text-brand-500 { color: #2563eb !important; }
+.speed-trust-bar .group-hover\:text-white:hover { color: #101828 !important; }
+
+.speed-surface { background: #f7f9fc !important; }
+.speed-workflow, .speed-testimonials { background: #fff !important; }
+.speed-section-intro .eyebrow { border-color: #dbeafe; color: #2563eb; background: #eff6ff; box-shadow: none; }
+.speed-section-intro h2 { color: #101828; }
+.speed-service-card, .speed-workflow-card, .speed-benefit-card, .speed-testimonial-card {
+  border-color: rgba(203, 213, 225, 0.72) !important;
+  border-radius: 1.7rem !important;
+  box-shadow: 0 1px 2px rgba(16,24,40,.03), 0 16px 42px rgba(16,24,40,.055) !important;
+}
+.speed-service-card:hover, .speed-workflow-card:hover, .speed-benefit-card:hover, .speed-testimonial-card:hover {
+  border-color: rgba(96,165,250,.52) !important;
+  box-shadow: 0 20px 48px rgba(37,99,235,.13) !important;
+}
+.speed-service-card .text-brand-600 { color: #2563eb; }
+.speed-workflow .bg-gradient-to-br.from-brand-400 { background-image: linear-gradient(135deg,#2563eb,#38bdf8) !important; box-shadow: 0 10px 22px rgba(37,99,235,.23); }
+
+@media (max-width: 1023px) {
+  .speed-hero > .absolute.inset-0:first-child { width: 100%; border-radius: 0; opacity: 0.21; }
+  .speed-hero > .absolute.inset-0:first-child > div:nth-child(2) { background: rgba(246,248,252,.72) !important; }
+  .speed-hero { min-height: 42rem; }
+}
+
+/* Speed Fitment palette — echo the red, orange and gold of the marque. */
+.speed-home {
+  --speed-ink: #2a1110;
+  --speed-muted: #705d58;
+  --speed-blue: #c91f25;
+  --speed-surface: #fff6ed;
+  background: #fff6ed;
+}
+
+.speed-hero {
+  background: #2a1110 !important;
+}
+
+.speed-hero::before {
+  background: radial-gradient(circle, rgba(255, 172, 25, 0.25), rgba(231, 51, 34, 0.08) 55%, transparent 70%);
+}
+
+.speed-hero > .absolute.inset-0:first-child {
+  width: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.speed-hero > .absolute.inset-0:first-child img {
+  opacity: 0.52 !important;
+  filter: saturate(0.96) contrast(1.06) brightness(0.70);
+}
+
+.speed-hero > .absolute.inset-0:first-child > div:nth-child(2) {
+  background: linear-gradient(90deg, rgba(42,17,16,.98) 0%, rgba(42,17,16,.88) 43%, rgba(42,17,16,.30) 78%, rgba(42,17,16,.16) 100%) !important;
+}
+
+.speed-hero > .absolute.inset-0:first-child > div:nth-child(3) {
+  background: linear-gradient(0deg, rgba(42,17,16,.78), transparent 53%, rgba(42,17,16,.22)) !important;
+}
+
+.speed-hero::after { border-color: rgba(255, 185, 24, .28); box-shadow: 0 0 0 1.8rem rgba(255, 94, 35, .06), 0 0 0 3.6rem rgba(255, 185, 24, .035); }
+.speed-hero .hero-orb { border-color: rgba(255, 185, 24, .25); }
+.speed-hero .speed-line { background: linear-gradient(90deg, transparent, rgba(255, 185, 24, .65), transparent); }
+.speed-hero .bg-brand-500\/20 { background-color: rgba(237, 38, 32, .20) !important; }
+.speed-hero .bg-accent-500\/10, .speed-hero .bg-brand-600\/10 { background-color: rgba(255, 185, 24, .12) !important; }
+.speed-hero .border-brand-400\/30 { border-color: rgba(255, 193, 27, .42) !important; }
+.speed-hero .bg-brand-400\/10 { background-color: rgba(255, 185, 24, .12) !important; }
+.speed-hero .text-brand-300 { color: #ffd15a !important; }
+.speed-hero .bg-brand-300 { background-color: #ffbe1a !important; }
+.speed-hero h1, .speed-hero h1.text-white { color: white !important; }
+.speed-hero .animate-shimmer-text { background: linear-gradient(100deg, #ffb719, #ffdf73 50%, #ff5b3b) !important; background-size: 180% auto !important; -webkit-background-clip: text !important; background-clip: text !important; }
+.speed-hero .text-gray-300, .speed-hero .text-gray-400 { color: #e5d2cb !important; }
+.speed-hero .bg-white\/5 { background-color: rgba(255,255,255,.08) !important; }
+.speed-hero .border-white\/10 { border-color: rgba(255,255,255,.15) !important; }
+.speed-hero .text-white { color: white !important; }
+.speed-hero .text-brand-400 { color: #ffcf46 !important; }
+.speed-hero .border-gray-950 { border-color: #2a1110 !important; }
+.speed-hero .bg-black\/20 { background-color: rgba(19,7,6,.30) !important; box-shadow: none; }
+.speed-hero .from-brand-300 { --tw-gradient-from: #ffbe1a var(--tw-gradient-from-position) !important; }
+.speed-hero .to-brand-600 { --tw-gradient-to: #d61f24 var(--tw-gradient-to-position) !important; }
+.speed-hero .bg-white\/15 { background-color: rgba(255,255,255,.12) !important; }
+.speed-hero .border-white\/20 { border-color: rgba(255,255,255,.24) !important; }
+.speed-hero .text-shadow-glow { text-shadow: 0 8px 30px rgba(0,0,0,.28) !important; }
+.speed-hero .shadow-glow-brand { box-shadow: 0 14px 36px rgba(221, 34, 28, .30) !important; }
+.speed-hero button.bg-brand-500 { background: linear-gradient(135deg, #e32623, #b9121a) !important; color: white !important; }
+.speed-hero button.bg-brand-500:hover { background: linear-gradient(135deg, #f13a2f, #c81c20) !important; }
+.speed-hero button.bg-white\/5 { color: white !important; border-color: rgba(255,255,255,.25) !important; background: rgba(255,255,255,.08) !important; }
+
+.speed-trust-bar { background: #3a1715 !important; border-color: rgba(255,185,24,.18) !important; }
+.speed-trust-bar .text-gray-300 { color: #f1dbd4 !important; }
+.speed-trust-bar .text-brand-500 { color: #ffc22e !important; }
+.speed-trust-bar .group-hover\:text-white:hover { color: #fff7e8 !important; }
+
+.speed-surface { background: radial-gradient(circle at 7% 12%, rgba(255,185,24,.12), transparent 24rem), radial-gradient(circle at 93% 82%, rgba(224,39,32,.10), transparent 28rem), #fff6ed !important; }
+.speed-workflow, .speed-testimonials { background: #fffaf5 !important; }
+.speed-section-intro .eyebrow { border-color: #ffdca1; color: #b91e20; background: #fff1d9; }
+.speed-section-intro h2 { color: #2a1110; }
+.speed-service-card, .speed-workflow-card, .speed-benefit-card, .speed-testimonial-card { border-color: rgba(151,72,42,.17) !important; background: rgba(255,253,249,.93) !important; }
+.speed-service-card:hover, .speed-workflow-card:hover, .speed-benefit-card:hover, .speed-testimonial-card:hover { border-color: rgba(224,39,32,.48) !important; box-shadow: 0 20px 48px rgba(180,44,24,.16) !important; }
+.speed-service-card .text-brand-600 { color: #c91f25 !important; }
+.speed-workflow .bg-gradient-to-br.from-brand-400 { background-image: linear-gradient(135deg,#f6a813,#d52122) !important; box-shadow: 0 10px 22px rgba(213,33,34,.25); }
+
+@media (max-width: 1023px) {
+  .speed-hero > .absolute.inset-0:first-child { opacity: 1; }
+  .speed-hero > .absolute.inset-0:first-child > div:nth-child(2) { background: rgba(42,17,16,.82) !important; }
+}

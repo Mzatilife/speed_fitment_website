@@ -18,6 +18,18 @@ export function Navbar() {
   useEffect(() => { setMobileOpen(false); }, [path]);
 
   useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') setMobileOpen(false); };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.altKey && (e.key === 'l' || e.key === 'L')) { e.preventDefault(); navigate('/login'); }
       if (e.altKey && (e.key === 'd' || e.key === 'D')) {
@@ -44,10 +56,10 @@ export function Navbar() {
   };
 
   const isHome = path === '/';
-  const useDarkBg = scrolled || mobileOpen || !isHome;
+  const useSurface = scrolled || mobileOpen || !isHome;
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${useDarkBg ? 'glass-premium shadow-2xl shadow-black/30 border-b border-white/[0.06]' : 'bg-transparent'}`}>
+    <header className={`fixed top-0 left-0 right-0 z-[70] transition-all duration-500 ${useSurface ? 'bg-white/80 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.06),0_12px_36px_rgba(15,23,42,0.06)] border-b border-slate-200/70' : 'bg-transparent'}`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -57,57 +69,64 @@ export function Navbar() {
               <div className="absolute inset-0 bg-brand-500/30 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="text-lg font-extrabold text-white tracking-tight font-display">SpeedFitment</span>
+              <span className={`text-lg font-extrabold tracking-tight font-display transition-colors duration-500 ${isHome && !useSurface ? 'text-white' : 'text-slate-950'}`}>SpeedFitment</span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map(link => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${path === link.to ? 'text-brand-400' : 'text-gray-300 hover:text-white'}`}
+                className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${path === link.to ? 'text-red-700 bg-amber-50' : 'text-slate-600 hover:text-slate-950 hover:bg-amber-50/70'}`}
               >
                 {link.label}
                 {path === link.to && (
-                  <span className="absolute -bottom-px left-1/2 -translate-x-1/2 h-0.5 w-6 bg-gradient-to-r from-transparent via-brand-400 to-transparent rounded-full" />
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-5 bg-red-600 rounded-full" />
                 )}
               </Link>
             ))}
-            <Link to="/book" className="ml-2 relative px-4 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-lg transition-colors flex items-center gap-1 group">
+            <Link to="/book" className="ml-2 relative px-4 py-2 text-sm font-semibold text-slate-800 hover:text-red-700 rounded-xl transition-colors flex items-center gap-1 group">
               Book Now
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
 
           {/* Desktop Actions — discreet access */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden lg:flex items-center gap-2">
             {profile ? (
               <>
                 {(profile.role === 'admin' || profile.role === 'cashier') && (
-                  <Link to="/admin" className="p-2 text-gray-400 hover:text-brand-400 hover:bg-white/5 rounded-lg transition-all active:scale-90" title="Dashboard (Alt+D)">
+                  <Link to="/admin" className="p-2 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-all active:scale-90" title="Dashboard (Alt+D)">
                     <LayoutDashboard className="h-5 w-5" />
                   </Link>
                 )}
                 {profile.role === 'customer' && (
-                  <Link to="/dashboard" className="p-2 text-gray-400 hover:text-brand-400 hover:bg-white/5 rounded-lg transition-all active:scale-90" title="My Account (Alt+D)">
+                  <Link to="/dashboard" className="p-2 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-all active:scale-90" title="My Account (Alt+D)">
                     <User className="h-5 w-5" />
                   </Link>
                 )}
-                <button onClick={handleSignOut} className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all active:scale-90" title="Sign out">
+                <button onClick={handleSignOut} className="p-2 text-slate-500 hover:text-slate-950 hover:bg-slate-100 rounded-xl transition-all active:scale-90" title="Sign out">
                   <LogOut className="h-5 w-5" />
                 </button>
               </>
             ) : (
-              <Link to="/login" className="p-2 text-gray-400 hover:text-brand-400 hover:bg-white/5 rounded-lg transition-all active:scale-90" title="Sign In (Alt+L)">
+              <Link to="/login" className="p-2 text-slate-500 hover:text-blue-700 hover:bg-blue-50 rounded-xl transition-all active:scale-90" title="Sign In (Alt+L)">
                 <Lock className="h-5 w-5" />
               </Link>
             )}
           </div>
 
           {/* Mobile Toggle */}
-          <button className="md:hidden p-2 text-white" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
+          <button
+            type="button"
+            className="lg:hidden relative z-10 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white/85 text-slate-900 shadow-sm backdrop-blur-md transition-all hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 active:scale-95"
+            onClick={() => setMobileOpen(open => !open)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
+          >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
@@ -115,21 +134,21 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden glass-premium border-t border-white/[0.06] animate-fade-in">
-          <div className="px-4 py-4 space-y-1">
+        <div id="mobile-navigation" className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-slate-200 animate-fade-in max-h-[calc(100vh-4rem)] overflow-y-auto shadow-xl shadow-slate-900/10">
+          <div className="px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-1">
             {navLinks.map(link => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`block px-4 py-3 text-sm font-medium rounded-xl transition-colors ${path === link.to ? 'text-brand-400 bg-white/5' : 'text-gray-200 hover:bg-white/10'}`}
+                className={`block px-4 py-3 text-sm font-medium rounded-xl transition-colors ${path === link.to ? 'text-red-700 bg-amber-50' : 'text-slate-700 hover:bg-amber-50'}`}
               >
                 {link.label}
               </Link>
             ))}
-            <Link to="/book" className="block px-4 py-3 text-sm font-semibold text-gray-900 bg-brand-500 rounded-xl mt-2 text-center">
+            <Link to="/book" className="block px-4 py-3 text-sm font-semibold text-white bg-slate-950 rounded-xl mt-2 text-center">
               Book Appointment
             </Link>
-            <div className="pt-3 mt-2 border-t border-white/10">
+            <div className="pt-3 mt-2 border-t border-slate-200">
               {profile ? (
                 <>
                   {(profile.role === 'admin' || profile.role === 'cashier') && (

@@ -6,10 +6,10 @@ export function Footer() {
   const { settings } = useSettings();
 
   return (
-    <footer className="bg-gray-950 text-gray-400 relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid-pattern opacity-30" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-500/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-32 right-0 w-96 h-96 bg-accent-500/5 rounded-full blur-3xl" />
+    <footer className="bg-slate-950 text-gray-400 relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-pattern opacity-10 invert" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-32 right-0 w-96 h-96 bg-sky-400/10 rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top CTA strip */}
@@ -19,7 +19,7 @@ export function Footer() {
               <h3 className="text-2xl font-extrabold text-white font-display">Ready to get started?</h3>
               <p className="text-sm text-gray-400 mt-1.5">Book your appointment today — our expert team is standing by.</p>
             </div>
-            <Link to="/book" className="inline-flex items-center gap-2 px-6 py-3.5 bg-brand-500 text-gray-900 font-bold rounded-xl hover:bg-brand-400 hover:shadow-glow-brand hover:scale-105 active:scale-95 transition-all duration-300 whitespace-nowrap">
+            <Link to="/book" className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-slate-950 font-bold rounded-2xl hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all duration-300 whitespace-nowrap">
               Book Appointment
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -41,7 +41,7 @@ export function Footer() {
             </p>
             <div className="flex gap-3 mt-6">
               {[Facebook, Twitter, Instagram].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-xl hover:bg-brand-500 hover:text-gray-900 transition-all duration-300 hover:scale-110 active:scale-95">
+                <a key={i} href="#" className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 hover:scale-110 active:scale-95">
                   <Icon className="h-4 w-4" />
                 </a>
               ))}
