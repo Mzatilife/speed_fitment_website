@@ -65,11 +65,12 @@ export function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex min-w-0 items-center gap-2.5 group">
             <div className="relative">
-              <img src="/logo.png" alt="SpeedFitment" className="w-11 h-11 rounded-xl object-contain group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 ease-out" />
+              <img src="/logo.png" alt="Speed Fitment and service center" className="w-11 h-11 rounded-xl object-contain group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 ease-out" />
               <div className="absolute inset-0 bg-brand-500/30 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
             </div>
             <div className="min-w-0 flex flex-col leading-none">
-              <span className={`truncate text-lg font-extrabold tracking-tight font-display transition-colors duration-500 ${isHome && !useSurface ? 'text-white' : 'text-slate-950'}`}>SpeedFitment</span>
+              <span className={`truncate text-lg font-extrabold tracking-tight font-display transition-colors duration-500 ${isHome && !useSurface ? 'text-white' : 'text-slate-950'}`}>Speed Fitment</span>
+              <span className={`text-[10px] font-semibold tracking-wide transition-colors duration-500 ${isHome && !useSurface ? 'text-white/75' : 'text-slate-500'}`}>and service center</span>
             </div>
           </Link>
 
@@ -79,7 +80,9 @@ export function Navbar() {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${path === link.to ? 'text-red-700 bg-amber-50' : 'text-slate-600 hover:text-slate-950 hover:bg-amber-50/70'}`}
+                className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 ${path === link.to
+                  ? (isHome && !useSurface ? 'text-white bg-white/15' : 'text-red-700 bg-amber-50')
+                  : (isHome && !useSurface ? 'text-white/90 hover:text-white hover:bg-white/10' : 'text-slate-600 hover:text-slate-950 hover:bg-amber-50/70')}`}
               >
                 {link.label}
                 {path === link.to && (
@@ -87,7 +90,7 @@ export function Navbar() {
                 )}
               </Link>
             ))}
-            <Link to="/book" className="ml-2 relative px-4 py-2 text-sm font-semibold text-slate-800 hover:text-red-700 rounded-xl transition-colors flex items-center gap-1 group">
+            <Link to="/book" className={`ml-2 relative px-4 py-2 text-sm font-semibold rounded-xl transition-colors flex items-center gap-1 group ${isHome && !useSurface ? 'text-white hover:bg-white/10' : 'text-slate-800 hover:text-red-700'}`}>
               Book Now
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>

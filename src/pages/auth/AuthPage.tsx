@@ -104,7 +104,8 @@ export function AuthPage({ mode }: { mode: 'login' | 'signup' }) {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-400 to-brand-600 rounded-2xl mb-4 shadow-glow-brand">
               <Wrench className="h-9 w-9 text-gray-900" />
             </div>
-            <h1 className="text-2xl font-extrabold text-white font-display">SpeedFitment</h1>
+            <h1 className="text-2xl font-extrabold text-white font-display">Speed Fitment</h1>
+            <p className="text-xs text-gray-400 mt-1">and service center</p>
           </div>
           <div className="bg-white/[0.07] backdrop-blur-2xl border border-white/10 rounded-3xl shadow-elev p-8 text-center">
             <div className="w-16 h-16 bg-brand-500/15 border border-brand-500/30 rounded-2xl flex items-center justify-center mx-auto mb-5">
@@ -146,7 +147,8 @@ export function AuthPage({ mode }: { mode: 'login' | 'signup' }) {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-400 to-brand-600 rounded-2xl mb-4 shadow-glow-brand">
             <Wrench className="h-9 w-9 text-gray-900" />
           </div>
-          <h1 className="text-2xl font-extrabold text-white font-display">SpeedFitment</h1>
+          <h1 className="text-2xl font-extrabold text-white font-display">Speed Fitment</h1>
+          <p className="text-xs text-gray-400 mt-1">and service center</p>
           <p className="text-sm text-gray-400 mt-1.5">
             {isBootstrapSignup ? 'Create the admin account' : 'Sign in to your account'}
           </p>

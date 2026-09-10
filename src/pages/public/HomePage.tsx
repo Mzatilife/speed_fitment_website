@@ -294,7 +294,7 @@ export function HomePage() {
               <Award className="h-3.5 w-3.5" />
               Why Choose Us
             </div>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 font-display">The SpeedFitment Difference</h2>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 font-display">The Speed Fitment Difference</h2>
             <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg">Experience premium auto care with our expert team.</p>
           </div>
 

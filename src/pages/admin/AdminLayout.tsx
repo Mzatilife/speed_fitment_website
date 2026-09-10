@@ -46,10 +46,11 @@ export function AdminLayout({ children, title }: { children: ReactNode; title: s
         {/* Logo */}
         <div className="relative p-5 border-b border-white/5 flex items-center justify-between gap-3">
           <Link to="/admin" className="flex items-center gap-3 min-w-0" onClick={() => setSidebarOpen(false)}>
-            <img src="/logo.png" alt="SpeedFitment" className="w-11 h-11 rounded-xl object-contain" />
+            <img src="/logo.png" alt="Speed Fitment and service center" className="w-11 h-11 rounded-xl object-contain" />
             <div>
-              <span className="text-base font-extrabold text-white block leading-none font-display">SpeedFitment</span>
-              <span className="text-[10px] text-brand-400 font-medium tracking-widest uppercase mt-1 block">Admin Panel</span>
+              <span className="text-base font-extrabold text-white block leading-none font-display">Speed Fitment</span>
+              <span className="text-[10px] text-brand-400 font-medium tracking-wide mt-1 block">and service center</span>
+              <span className="text-[10px] text-gray-400 font-medium tracking-widest uppercase mt-1 block">Admin Panel</span>
             </div>
           </Link>
           <button type="button" onClick={() => setSidebarOpen(false)} className="lg:hidden w-10 h-10 shrink-0 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white flex items-center justify-center" aria-label="Close admin navigation">

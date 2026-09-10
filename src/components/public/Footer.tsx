@@ -31,9 +31,10 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-4">
             <div className="flex items-center gap-2.5 mb-5">
-              <img src="/logo.png" alt="SpeedFitment" className="w-11 h-11 rounded-xl object-contain" />
+              <img src="/logo.png" alt="Speed Fitment and service center" className="w-11 h-11 rounded-xl object-contain" />
               <div>
-                <span className="text-lg font-extrabold text-white tracking-tight block leading-none font-display">SpeedFitment</span>
+                <span className="text-lg font-extrabold text-white tracking-tight block leading-none font-display">Speed Fitment</span>
+                <span className="text-[10px] font-semibold text-gray-400 tracking-wide block mt-1">and service center</span>
               </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
